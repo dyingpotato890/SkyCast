@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -37,7 +38,35 @@ class _WeatherAppState extends State<WeatherApp> {
   }
 
   // Weather Animations
+  String getWeatherAnimation(String? mainCondition) {
+    if (mainCondition == null) {
+      return 'assets/sunny.json'; // Default
+    }
 
+    switch (mainCondition.toLowerCase()) {
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+        return 'assets/cloudy.json';
+
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+        return 'assets/rainy.json';
+
+      case 'thunderstorm':
+        return 'assets/thunder.json';
+      
+      case 'clear':
+        return 'assets/sunny.json';
+
+      default:
+        return 'assets/sunny.json';
+    }
+  }
 
   @override
   void initState() {
@@ -57,10 +86,20 @@ class _WeatherAppState extends State<WeatherApp> {
             Text(
               _weather?.cityName ?? "City.."
             ),
+
+            // Animation
+            Lottie.asset(
+              getWeatherAnimation(_weather?.mainCondition)
+            ),
         
             // Temperature
             Text(
               '${_weather?.temp.round()} °C' 
+            ),
+
+            // Weather Condition
+            Text(
+              _weather?.mainCondition ?? ""
             ),
           ],
         ),
