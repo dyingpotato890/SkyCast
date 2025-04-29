@@ -15,11 +15,12 @@ class _WeatherAppState extends State<WeatherApp> {
   // Api Key
   final _weatherService = WeatherServices(apiKey: dotenv.env['API_KEY'] ?? 'error');
   Weather? _weather;
-
+  
   // Fetch Weather
   _fetchWeather () async {
     // Get Current City
     String cityName = await _weatherService.getCurrentCity();
+    print('City: $cityName');
 
     // Get Weather For City
     try {

@@ -8,14 +8,14 @@ import 'package:http/http.dart' as http;
 class WeatherServices {
 
   // ignore: constant_identifier_names
-  static const BASE_URL = 'https://api.openweathermap.org/data/3.0/onecall?';
+  static const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
   final String apiKey;
 
   WeatherServices({required this.apiKey});
 
   Future<Weather> getWeather(String cityName) async {
     final response = await http.get(
-      Uri.parse('$BASE_URL?q=$cityName&appid=$apiKey&units=metric')
+      Uri.parse('$BASE_URL?q=$cityName&appid=$apiKey&units=metric') // Change the city
     );
 
     if (response.statusCode == 200) {
