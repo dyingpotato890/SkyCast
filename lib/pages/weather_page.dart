@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:weather_app/widgets/row_element.dart';
 
 class WeatherApp extends StatefulWidget {
   const WeatherApp({super.key});
@@ -164,231 +165,159 @@ class _WeatherAppState extends State<WeatherApp> {
               ),
 
               // -------------------------------
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset('assets/location.png', height: 20),
-
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-
-                      // City Name
-                      Text(
-                        _weather?.cityName ?? "City..",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: MediaQuery.of(context).size.width * 0.02),
-
-                  Text(
-                    "Good Morning",
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset('assets/location.png', height: 20),
+                
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+                
+                        // City Name
+                        Text(
+                          _weather?.cityName ?? "City..",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
-                  ),
-
-                  SizedBox(height: media.height * 0.05),
-
-                  // Animated Image
-                  Center(
-                    child: Lottie.asset(
-                      getWeatherAnimation(_weather?.mainCondition),
-                    ),
-                  ),
-
-                  SizedBox(height: media.height * 0.05),
-
-                  // Temperature
-                  Center(
-                    child: Text(
-                      '${_weather?.temp.round()} °C',
+                
+                    SizedBox(height: MediaQuery.of(context).size.width * 0.02),
+                
+                    Text(
+                      "Good Morning",
                       style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-
-                  SizedBox(height: 5),
-
-                  // Weather Condition
-                  Center(
-                    child: Text(
-                      _weather?.mainCondition.toUpperCase() ?? "",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.w500,
+                
+                    SizedBox(height: media.height * 0.05),
+                
+                    // Animated Image
+                    Center(
+                      child: Lottie.asset(
+                        getWeatherAnimation(_weather?.mainCondition),
                       ),
                     ),
-                  ),
-
-                  SizedBox(height: 5),
-
-                  // Time And Day Info
-                  Center(
-                    child: Text(
-                      'Wednesday 20\t\t\t|\t\t\t12:00 AM',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white60
+                
+                    SizedBox(height: media.height * 0.05),
+                
+                    // Temperature
+                    Center(
+                      child: Text(
+                        '${_weather?.temp.round()} °C',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-
-                  SizedBox(height: media.height * 0.05),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Sunrise
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/sunrise.png',
-                            scale: 8,
-                          ),
-                          
-                          SizedBox(width: 5,),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Sunrise',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300
-                                ),
-                              ),
-                              Text(
-                                '${_formatTime(_weather?.sunrise)} ${_getAmPm(_weather?.sunrise)}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                
+                    SizedBox(height: 5),
+                
+                    // Weather Condition
+                    Center(
+                      child: Text(
+                        _weather?.mainCondition.toUpperCase() ?? "",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-
-                      // Sunset
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/sunset.png',
-                            scale: 8,
-                          ),
-                          
-                          SizedBox(width: 5,),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Sunset',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300
-                                ),
-                              ),
-                              Text(
-                                '${_formatTime(_weather?.sunset)} ${_getAmPm(_weather?.sunset)}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: Divider(
-                      color: Colors.grey[800],
                     ),
-                  ),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Minimum Temperature
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/minTemp.png',
-                            scale: 8,
-                          ),
-                          
-                          SizedBox(width: 5,),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Temp Min',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300
-                                ),
-                              ),
-                              Text(
-                                '${_weather?.minTemp ?? "--"}°C',
-                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                
+                    SizedBox(height: 5),
+                
+                    // Time And Day Info
+                    Center(
+                      child: Text(
+                        'Wednesday 20\t\t\t|\t\t\t12:00 AM',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.white60
+                        ),
                       ),
-
-                      // Maximum Temperature
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/maxTemp.png',
-                            scale: 8,
-                          ),
-                          
-                          SizedBox(width: 5,),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Temp Max',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300
-                                ),
-                              ),
-                              Text(
-                                '${_weather?.maxTemp ?? "--"}°C',
-                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
+                    ),
+                
+                    SizedBox(height: media.height * 0.05),
+                
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Sunrise
+                        RowElement(
+                          title: 'Sunrise',
+                          value: '${_formatTime(_weather?.sunrise)} ${_getAmPm(_weather?.sunrise)}',
+                          element: 'assets/sunrise.png',
+                        ),
+                
+                        // Sunset
+                        RowElement(
+                          title: 'Sunset',
+                          value: '${_formatTime(_weather?.sunset)} ${_getAmPm(_weather?.sunset)}',
+                          element: 'assets/sunset.png',
+                        ),
+                      ],
+                    ),
+                
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: Divider(
+                        color: Colors.grey[800],
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Minimum Temperature
+                        RowElement(
+                          title: 'Temp Min',
+                          value: '${_weather?.minTemp ?? "--"}°C',
+                          element: 'assets/minTemp.png',
+                        ),
+                
+                        // Maximum Temperature
+                        RowElement(
+                          title: 'Temp Max',
+                          value: '${_weather?.maxTemp ?? "--"}°C',
+                          element: 'assets/maxTemp.png',
+                        ),
+                      ],
+                    ),
+                
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: Divider(
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Wind Speed
+                        RowElement(
+                          title: 'Wind Speed',
+                          value: '${_weather?.windSpeed ?? "--"} m/s',
+                          element: 'assets/wind.png',
+                        ),
+                
+                        // Humidity
+                        RowElement(
+                          title: 'Humidity',
+                          value: '${_weather?.humidity ?? "--"}%',
+                          element: 'assets/humidity.png',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
