@@ -25,7 +25,6 @@ class _WeatherAppState extends State<WeatherApp> {
   _fetchWeather() async {
     // Get Current City
     String cityName = await _weatherService.getCurrentCity();
-    print('City: $cityName');
 
     // Get Weather For City
     try {
@@ -222,7 +221,150 @@ class _WeatherAppState extends State<WeatherApp> {
 
                   SizedBox(height: media.height * 0.05),
 
-                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Sunrise
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/sunrise.png',
+                            scale: 8,
+                          ),
+                          
+                          SizedBox(width: 5,),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sunrise',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300
+                                ),
+                              ),
+                              Text(
+                                '6:00 AM',
+                                 style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      // Sunset
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/sunset.png',
+                            scale: 8,
+                          ),
+                          
+                          SizedBox(width: 5,),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sunset',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300
+                                ),
+                              ),
+                              Text(
+                                '6:50 PM',
+                                 style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: Divider(
+                      color: Colors.grey[800],
+                    ),
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Minimum Temperature
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/minTemp.png',
+                            scale: 8,
+                          ),
+                          
+                          SizedBox(width: 5,),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Temp Min',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300
+                                ),
+                              ),
+                              Text(
+                                '8°C',
+                                 style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      // Maximum Temperature
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/maxTemp.png',
+                            scale: 8,
+                          ),
+                          
+                          SizedBox(width: 5,),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Temp Max',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300
+                                ),
+                              ),
+                              Text(
+                                '12°C',
+                                 style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -232,30 +374,3 @@ class _WeatherAppState extends State<WeatherApp> {
     );
   }
 }
-
-// Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             // City Name
-//             Text(
-//               _weather?.cityName ?? "City.."
-//             ),
-
-//             // Animation
-//             Lottie.asset(
-//               getWeatherAnimation(_weather?.mainCondition)
-//             ),
-        
-//             // Temperature
-//             Text(
-//               '${_weather?.temp.round()} °C' 
-//             ),
-
-//             // Weather Condition
-//             Text(
-//               _weather?.mainCondition ?? ""
-//             ),
-//           ],
-//         ),
-//       ),
