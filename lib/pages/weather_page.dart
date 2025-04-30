@@ -70,6 +70,29 @@ class _WeatherAppState extends State<WeatherApp> {
     }
   }
 
+  String _formatTime(int? timestamp) {
+    if (timestamp == null) return '--:--';
+
+    // Convert Unix timestamp to DateTime (multiply by 1000 to convert seconds to milliseconds)
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000).toLocal();
+
+    // Convert hour to 12-hour format
+    int hour = dateTime.hour % 12;
+    if (hour == 0) hour = 12; // handle midnight and noon cases
+
+    String minute = dateTime.minute.toString().padLeft(2, '0');
+
+    return '$hour:$minute';
+  }
+
+  // Determine AM/PM based on hour
+  String _getAmPm(int? timestamp) {
+    if (timestamp == null) return '';
+    
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000).toLocal();
+    return dateTime.hour >= 12 ? 'PM' : 'AM';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -245,8 +268,8 @@ class _WeatherAppState extends State<WeatherApp> {
                                 ),
                               ),
                               Text(
-                                '6:00 AM',
-                                 style: TextStyle(
+                                '${_formatTime(_weather?.sunrise)} ${_getAmPm(_weather?.sunrise)}',
+                                style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700
                                 ),
@@ -277,8 +300,8 @@ class _WeatherAppState extends State<WeatherApp> {
                                 ),
                               ),
                               Text(
-                                '6:50 PM',
-                                 style: TextStyle(
+                                '${_formatTime(_weather?.sunset)} ${_getAmPm(_weather?.sunset)}',
+                                style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700
                                 ),
@@ -321,7 +344,7 @@ class _WeatherAppState extends State<WeatherApp> {
                                 ),
                               ),
                               Text(
-                                '8°C',
+                                '${_weather?.minTemp ?? "--"}°C',
                                  style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700
@@ -353,7 +376,7 @@ class _WeatherAppState extends State<WeatherApp> {
                                 ),
                               ),
                               Text(
-                                '12°C',
+                                '${_weather?.maxTemp ?? "--"}°C',
                                  style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700

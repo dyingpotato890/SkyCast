@@ -15,7 +15,7 @@ class WeatherServices {
 
   Future<Weather> getWeather(String cityName) async {
     final response = await http.get(
-      Uri.parse('$BASE_URL?q=$cityName&appid=$apiKey&units=metric') // Change the city
+      Uri.parse('$BASE_URL?q=Kochi&appid=$apiKey&units=metric') // Change the city
     );
 
     if (response.statusCode == 200) {
