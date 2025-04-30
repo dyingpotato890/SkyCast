@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_services.dart';
@@ -21,6 +23,29 @@ class _WeatherAppState extends State<WeatherApp> {
     apiKey: dotenv.env['API_KEY'] ?? 'error',
   );
   Weather? _weather;
+
+  String _timeString = '';
+  Timer? _timer;
+
+  final int hour = DateTime.now().hour;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = _formatDateTime(now);
+    setState(() {
+      _timeString = formattedDateTime;
+    });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return DateFormat('HH:mm').format(dateTime);
+  }
 
   // Fetch Weather
   _fetchWeather() async {
@@ -58,13 +83,24 @@ class _WeatherAppState extends State<WeatherApp> {
       case 'rain':
       case 'drizzle':
       case 'shower rain':
-        return 'assets/rainy.json';
+        if (hour >= 20 || hour <= 3) {
+          return 'assets/rainy-night.json';
+        } else {
+          return 'assets/rainy-day.json';
+        }
 
       case 'thunderstorm':
         return 'assets/thunder.json';
 
       case 'clear':
-        return 'assets/sunny.json';
+        if (hour >= 20 || hour <= 3) {
+          return 'assets/night.json';
+        } else {
+          return 'assets/sunny.json';
+        }
+
+      case 'snow':
+        return 'assets/snowy.json';
 
       default:
         return 'assets/sunny.json';
@@ -74,16 +110,11 @@ class _WeatherAppState extends State<WeatherApp> {
   String _formatTime(int? timestamp) {
     if (timestamp == null) return '--:--';
 
-    // Convert Unix timestamp to DateTime (multiply by 1000 to convert seconds to milliseconds)
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000).toLocal();
 
-    // Convert hour to 12-hour format
-    int hour = dateTime.hour % 12;
-    if (hour == 0) hour = 12; // handle midnight and noon cases
+    final formattedTime = DateFormat('h:mm').format(dateTime);
 
-    String minute = dateTime.minute.toString().padLeft(2, '0');
-
-    return '$hour:$minute';
+    return formattedTime;
   }
 
   // Determine AM/PM based on hour
@@ -94,11 +125,21 @@ class _WeatherAppState extends State<WeatherApp> {
     return dateTime.hour >= 12 ? 'PM' : 'AM';
   }
 
+  // Date
+  String getCurrentDateFormatted() {
+    final now = DateTime.now();
+    final formatter = DateFormat('EEEE d');
+    return formatter.format(now);
+  }
+
   @override
   void initState() {
     super.initState();
 
     _fetchWeather();
+
+    _timeString = _formatDateTime(DateTime.now());
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) => _getTime());
   }
 
   @override
@@ -186,7 +227,12 @@ class _WeatherAppState extends State<WeatherApp> {
                     SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                 
                     Text(
-                      "Good Morning",
+                      "Good ${ 
+                        (hour >= 20 || hour < 4) ? 'Night' :
+                        (hour >= 4 && hour < 12) ? 'Morning' :
+                        (hour >= 12 && hour < 16) ? 'Afternoon' : 'Evening'
+                      }",
+
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
@@ -236,7 +282,8 @@ class _WeatherAppState extends State<WeatherApp> {
                     // Time And Day Info
                     Center(
                       child: Text(
-                        'Wednesday 20\t\t\t|\t\t\t12:00 AM',
+                        // ignore: unnecessary_brace_in_string_interps
+                        '${getCurrentDateFormatted()}\t\t\t|\t\t\t${_timeString}',
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.white60
@@ -264,6 +311,32 @@ class _WeatherAppState extends State<WeatherApp> {
                         ),
                       ],
                     ),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: Divider(
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Wind Speed
+                        RowElement(
+                          title: 'Wind Speed',
+                          value: '${_weather?.windSpeed ?? "--"} m/s',
+                          element: 'assets/wind.png',
+                        ),
+                
+                        // Humidity
+                        RowElement(
+                          title: 'Humidity',
+                          value: '${_weather?.humidity ?? "--"}%',
+                          element: 'assets/humidity.png',
+                        ),
+                      ],
+                    ),
                 
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 5),
@@ -287,32 +360,6 @@ class _WeatherAppState extends State<WeatherApp> {
                           title: 'Temp Max',
                           value: '${_weather?.maxTemp ?? "--"}°C',
                           element: 'assets/maxTemp.png',
-                        ),
-                      ],
-                    ),
-                
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Divider(
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Wind Speed
-                        RowElement(
-                          title: 'Wind Speed',
-                          value: '${_weather?.windSpeed ?? "--"} m/s',
-                          element: 'assets/wind.png',
-                        ),
-                
-                        // Humidity
-                        RowElement(
-                          title: 'Humidity',
-                          value: '${_weather?.humidity ?? "--"}%',
-                          element: 'assets/humidity.png',
                         ),
                       ],
                     ),
