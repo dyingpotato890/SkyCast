@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
@@ -44,7 +45,7 @@ class _WeatherAppState extends State<WeatherApp> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    return DateFormat('HH:mm').format(dateTime);
+    return DateFormat('HH:mm a').format(dateTime);
   }
 
   // Fetch Weather
@@ -219,7 +220,10 @@ class _WeatherAppState extends State<WeatherApp> {
                         // City Name
                         Text(
                           _weather?.cityName ?? "City..",
-                          style: TextStyle(color: Colors.white),
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 16
+                          ),
                         ),
                       ],
                     ),
@@ -233,14 +237,14 @@ class _WeatherAppState extends State<WeatherApp> {
                         (hour >= 12 && hour < 16) ? 'Afternoon' : 'Evening'
                       }",
 
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
+                      style: GoogleFonts.lato(
+                        fontSize: 38,
+                        fontWeight: FontWeight.w800,
                         color: Colors.white,
                       ),
                     ),
                 
-                    SizedBox(height: media.height * 0.05),
+                    SizedBox(height: media.height * 0.04),
                 
                     // Animated Image
                     Center(
